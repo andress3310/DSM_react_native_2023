@@ -3,6 +3,7 @@ import { Text, View, ScrollView, FlatList } from 'react-native';
 import { Card, Icon } from '@rneui/themed';
 import { EXCURSIONES } from '../comun/excursiones';
 import { COMENTARIOS } from '../comun/comentarios';
+import { baseUrl, tituloColorClaro } from '../comun/comun';
 
 function RenderExcursion(props) {
 
@@ -12,14 +13,14 @@ function RenderExcursion(props) {
             return(
             <Card>
               <Card.Divider/>
-              <Card.Image source={require('./imagenes/40Años.png')}></Card.Image>
+              <Card.Image source={{uri: baseUrl + excursion.imagen}}></Card.Image>
               <Text
                     style={{
                         position: 'absolute',
                         top: 25,
                         left: 0,
                         right: 0,
-                        color: 'chocolate',
+                        color: tituloColorClaro,
                         textAlign: 'center',
                         fontSize: 30,
                         fontWeight: 'bold',
