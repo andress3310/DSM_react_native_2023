@@ -31,9 +31,6 @@ function RenderContacto() {
 }
 
 class Contacto extends Component {
-        constructor(props) {
-            super(props);
-        }
       
         render(){
             return(<RenderContacto/>);
