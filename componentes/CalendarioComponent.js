@@ -14,7 +14,9 @@ class Calendario extends Component {
 
     render(){
 
-    const { navigate } = this.props.navigation;    
+    const { navigate } = this.props.navigation;
+    isLoading = this.props.excursiones.isLoading;
+    errMess = this.props.excursiones.errMess;
 
     const renderCalendarioItem = ({item, index}) => {
         return (
@@ -31,15 +33,29 @@ class Calendario extends Component {
         );
     };
 
-    return (
-        <SafeAreaView>
-            <FlatList 
-                data={this.props.excursiones.excursiones}
-                renderItem={renderCalendarioItem}
-                keyExtractor={item => item.id.toString()}
-            />
-        </SafeAreaView>
-    );
+        if (isLoading) {
+            return (
+                <IndicadorActividad />
+            );
+        }
+        else if (errMess) {
+            return (
+                <View>
+                    <Text>{props.errMess}</Text>
+                </View>
+            );
+        }
+        else {
+            return (
+                <SafeAreaView>
+                    <FlatList 
+                        data={this.props.excursiones.excursiones}
+                        renderItem={renderCalendarioItem}
+                        keyExtractor={item => item.id.toString()}
+                    />
+                </SafeAreaView>
+            );
+        }
     }
 }
 
