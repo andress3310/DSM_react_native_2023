@@ -3,6 +3,8 @@ import { ListItem, Avatar } from '@rneui/themed';
 import { SafeAreaView, FlatList } from 'react-native';
 import { baseUrl } from '../comun/comun';
 import { connect } from 'react-redux';
+import { IndicadorActividad } from './IndicadorActividadComponent';
+
 
 const mapStateToProps = state => {
     return {

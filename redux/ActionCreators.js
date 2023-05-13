@@ -151,3 +151,31 @@ export const addFavorito = (excursionId) => ({
     type: ActionTypes.ADD_FAVORITO,
     payload: excursionId
 });
+
+export const updateModalView = () => (dispatch) => {
+    dispatch(toggleModalView());
+};
+
+export const toggleModalView = () => ({
+    type: ActionTypes.TOGGLE_MODAL_VIEW,
+})
+
+export const postModalComentario = (event) => (dispatch) => {
+    dispatch(updateModalComentario(event));
+};
+
+export const updateModalComentario = (event) => ({
+    type: ActionTypes.UPDATE_MODAL_COMENTARIO,
+    payload: event
+})
+
+export const postComentario = (comentario) => (dispatch) => {
+    setTimeout(() => {
+        dispatch(addComentario(comentario));
+    }, 2000);
+}
+
+export const addComentario = (comentario) => ({
+    type: ActionTypes.ADD_COMENTARIO,
+    payload: comentario
+});
