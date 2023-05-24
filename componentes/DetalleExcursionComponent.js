@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, ScrollView, FlatList, Modal, Button, TextInput, StyleSheet } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { Card, Icon } from '@rneui/themed';
-import { baseUrl, tituloColorClaro } from '../comun/comun';
+import { baseUrlimages, tituloColorClaro } from '../comun/comun';
 import { connect } from 'react-redux';
 import { postComentario, postFavorito, postModalComentario, updateModalView } from '../redux/ActionCreators';
 
@@ -64,7 +64,7 @@ function RenderExcursion(props) {
     return (
       <Card>
         <Card.Divider />
-        <Card.Image source={{ uri: baseUrl + excursion.imagen }}></Card.Image>
+        <Card.Image source={{ uri: baseUrlimages + excursion.imagen }}></Card.Image>
         <Text
           style={{
             position: 'absolute',

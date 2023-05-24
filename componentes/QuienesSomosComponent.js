@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { SafeAreaView, FlatList, Text, ScrollView, View } from 'react-native';
 import { ListItem, Avatar, Card } from '@rneui/themed';
-import { baseUrl } from '../comun/comun';
+import { baseUrlimages } from '../comun/comun';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
@@ -48,7 +48,7 @@ class QuienesSomos extends Component {
                 <ListItem
                     key={index}
                     bottomDivider>
-                    <Avatar source={{ uri: baseUrl + item.imagen }} />
+                    <Avatar source={{ uri: baseUrlimages + item.imagen }} />
                     <ListItem.Content>
                         <ListItem.Title>{item.nombre}</ListItem.Title>
                         <ListItem.Subtitle>{item.descripcion}</ListItem.Subtitle>

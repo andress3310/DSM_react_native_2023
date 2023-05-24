@@ -1,8 +1,8 @@
 import * as ActionTypes from './ActionTypes';
-import { baseUrl } from '../comun/comun';
+import { baseUrldata } from '../comun/comun';
 
 export const fetchComentarios = () => (dispatch) => {
-    return fetch(baseUrl + 'comentarios')
+    return fetch(baseUrldata + 'comentarios.json')
     .then(response => {
         if (response.ok) {
           return response;
@@ -35,7 +35,7 @@ export const fetchExcursiones = () => (dispatch) => {
 
     dispatch(excursionesLoading());
 
-    return fetch(baseUrl + 'excursiones')
+    return fetch(baseUrldata + 'excursiones.json')
     .then(response => {
         if (response.ok) {
           return response;
@@ -72,7 +72,7 @@ export const fetchCabeceras = () => (dispatch) => {
     
     dispatch(cabecerasLoading());
 
-    return fetch(baseUrl + 'cabeceras')
+    return fetch(baseUrldata + 'cabeceras.json')
     .then(response => {
         if (response.ok) {
             return response;
@@ -109,7 +109,7 @@ export const fetchActividades = () => (dispatch) => {
     
     dispatch(actividadesLoading());
 
-    return fetch(baseUrl + 'actividades')
+    return fetch(baseUrldata + 'actividades.json')
     .then(response => {
         if (response.ok) {
             return response;

@@ -11,7 +11,7 @@ import QuienesSomos from './QuienesSomosComponent';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { Icon } from '@rneui/themed';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colorGaztaroaClaro, colorGaztaroaOscuro, baseUrl } from '../comun/comun';
+import { colorGaztaroaClaro, colorGaztaroaOscuro, baseUrlimages } from '../comun/comun';
 import { connect } from 'react-redux';
 import { fetchExcursiones, fetchComentarios, fetchCabeceras, fetchActividades } from '../redux/ActionCreators';
 
@@ -25,7 +25,7 @@ function CustomDrawerContent(props) {
       <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
         <View style={styles.drawerHeader}>
           <View style={{ flex: 1 }}>
-            <Image source={{uri: baseUrl + logoName}}/>
+            <Image source={{uri: baseUrlimages + logoName}}/>
           </View>
           <View style={{ flex: 2 }}>
             <Text style={styles.drawerHeaderText}> Gaztaroa</Text>

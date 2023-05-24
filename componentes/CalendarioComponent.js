@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ListItem, Avatar } from '@rneui/themed';
 import { SafeAreaView, FlatList } from 'react-native';
-import { baseUrl } from '../comun/comun';
+import { baseUrlimages} from '../comun/comun';
 import { connect } from 'react-redux';
 import { IndicadorActividad } from './IndicadorActividadComponent';
 
@@ -26,7 +26,7 @@ class Calendario extends Component {
             key={index}
             onPress={() => navigate('DetalleExcursion', { excursionId: item.id })}
             bottomDivider>
-                <Avatar source={{uri: baseUrl + item.imagen}}/>
+                <Avatar source={{uri: baseUrlimages + item.imagen}}/>
                 <ListItem.Content>
                     <ListItem.Title>{item.nombre}</ListItem.Title>
                     <ListItem.Subtitle>{item.descripcion}</ListItem.Subtitle>

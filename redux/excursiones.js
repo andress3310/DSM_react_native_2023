@@ -7,9 +7,11 @@ export const excursiones = (state = {
 }, action) => {
     switch (action.type) {
         case ActionTypes.ADD_EXCURSIONES:
+            console.log(action.payload)
             return {
                 ...state, isLoading: false, errMess: null, excursiones: action.payload
             };
+            
         case ActionTypes.EXCURSIONES_LOADING:
             return { ...state, isLoading: true, errMess: null, excursiones: [] }
         case ActionTypes.EXCURSIONES_FAILED:
