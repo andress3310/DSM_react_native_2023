@@ -170,9 +170,20 @@ export const updateModalComentario = (event) => ({
 })
 
 export const postComentario = (comentario) => (dispatch) => {
+
     setTimeout(() => {
         dispatch(addComentario(comentario));
     }, 2000);
+
+    fetch(baseUrldata+'comentarios.json', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(comentario)
+        });
+
 }
 
 export const addComentario = (comentario) => ({

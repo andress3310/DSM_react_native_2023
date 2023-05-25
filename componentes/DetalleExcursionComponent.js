@@ -41,9 +41,14 @@ const modalStyles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
+  console.log('aaaaaaaaaaaaaaaaaaaaa')
+  console.log('aaaaaaaaaaaaaaaaaaaaa')
+  console.log('aaaaaaaaaaaaaaaaaaaaa')
+  console.log('aaaaaaaaaaaaaaaaaaaaa')
+  console.log({'comentarios':Object.values(state.comentarios.comentarios),'errMess':state.comentarios.errMess})
   return {
     excursiones: state.excursiones,
-    comentarios: state.comentarios,
+    comentarios: {'comentarios':Object.values(state.comentarios.comentarios),'errMess':state.comentarios.errMess},
     favoritos: state.favoritos,
     modalComentario: state.modalComentario
   }
@@ -106,10 +111,8 @@ function RenderExcursion(props) {
     return (<View></View>);
   }
 }
-
 function RenderComentario(props) {
-  const comentarios = props.comentarios;
-
+  comentarios = props.comentarios;
   return (
     <Card>
       <Card.Title>Comentarios</Card.Title>
