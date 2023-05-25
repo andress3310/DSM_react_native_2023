@@ -4925,6 +4925,11 @@ expo-pwa@0.0.124:
     commander "2.20.0"
     update-check "1.5.3"
 
+expo-screen-capture@~5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/expo-screen-capture/-/expo-screen-capture-5.1.1.tgz#4a1d540f85721403fc58017142dfbebe3a05ff45"
+  integrity sha512-nR31IU+wEeNz2rDXE0/1y5oWnauXXE408ffwpogILDY7sRo2cUVJyy3ESL2ufb1evL4c0W03ffvr+FHNVKhjoQ==
+
 expo-status-bar@~1.4.4:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.4.4.tgz#6874ccfda5a270d66f123a9f220735a76692d114"
