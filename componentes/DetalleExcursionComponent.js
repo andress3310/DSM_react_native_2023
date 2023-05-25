@@ -5,6 +5,7 @@ import { Card, Icon } from '@rneui/themed';
 import { baseUrlimages, tituloColorClaro } from '../comun/comun';
 import { connect } from 'react-redux';
 import { postComentario, postFavorito, postModalComentario, updateModalView } from '../redux/ActionCreators';
+import * as Haptics from 'expo-haptics';
 
 const modalStyles = StyleSheet.create({
   container: {
@@ -41,11 +42,6 @@ const modalStyles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  console.log('aaaaaaaaaaaaaaaaaaaaa')
-  console.log('aaaaaaaaaaaaaaaaaaaaa')
-  console.log('aaaaaaaaaaaaaaaaaaaaa')
-  console.log('aaaaaaaaaaaaaaaaaaaaa')
-  console.log({'comentarios':Object.values(state.comentarios.comentarios),'errMess':state.comentarios.errMess})
   return {
     excursiones: state.excursiones,
     comentarios: {'comentarios':Object.values(state.comentarios.comentarios),'errMess':state.comentarios.errMess},
@@ -181,6 +177,9 @@ class DetalleExcursion extends Component {
   }
 
   gestionarComentario() {
+    Haptics.notificationAsync(
+      Haptics.NotificationFeedbackType.Success
+    )
     const comentario = {
       excursionId: this.props.route.params.excursionId,
       valoracion: this.props.modalComentario.modalComentario.rating,
