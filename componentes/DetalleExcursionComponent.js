@@ -192,6 +192,9 @@ class DetalleExcursion extends Component {
   }
 
   marcarFavorito(excursionId) {
+    Haptics.notificationAsync(
+      Haptics.NotificationFeedbackType.Warning
+    )
     this.props.postFavorito(excursionId);
   };
 
