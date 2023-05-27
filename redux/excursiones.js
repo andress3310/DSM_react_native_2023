@@ -7,7 +7,6 @@ export const excursiones = (state = {
 }, action) => {
     switch (action.type) {
         case ActionTypes.ADD_EXCURSIONES:
-            console.log(action.payload)
             return {
                 ...state, isLoading: false, errMess: null, excursiones: action.payload
             };

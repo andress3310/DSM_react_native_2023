@@ -13,11 +13,12 @@ import { Icon } from '@rneui/themed';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colorGaztaroaClaro, colorGaztaroaOscuro, baseUrlimages } from '../comun/comun';
 import { connect } from 'react-redux';
-import { fetchExcursiones, fetchComentarios, fetchCabeceras, fetchActividades } from '../redux/ActionCreators';
+import { fetchExcursiones, fetchComentarios, fetchCabeceras, fetchActividades, fetchFotos } from '../redux/ActionCreators';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const logoName = 'logo.png';
+
 
 function CustomDrawerContent(props) {
   return (
@@ -50,6 +51,7 @@ const mapStateToProps = state => {
   fetchComentarios: () => dispatch(fetchComentarios()),
   fetchCabeceras: () => dispatch(fetchCabeceras()),
   fetchActividades: () => dispatch(fetchActividades()),
+  fetchFotos: () => dispatch(fetchFotos())
  })
 
 function CalendarioNavegador({ navigation }) {
@@ -84,6 +86,7 @@ function CalendarioNavegador({ navigation }) {
   );
 }
 
+
 function HomeNavegador({ navigation }) {
   return (
     <Stack.Navigator
@@ -106,6 +109,7 @@ function HomeNavegador({ navigation }) {
     </Stack.Navigator>
   );
 }
+
 
 function ContactNavegador({ navigation }) {
   return (
@@ -226,6 +230,7 @@ class Campobase extends Component {
     this.props.fetchComentarios();
     this.props.fetchCabeceras();
     this.props.fetchActividades();
+    this.props.fetchFotos();
   }
 
   render() {
@@ -262,5 +267,6 @@ const styles = StyleSheet.create({
     height: 60
   }
 });
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(Campobase);

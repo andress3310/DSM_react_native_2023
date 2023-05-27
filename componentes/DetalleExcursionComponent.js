@@ -2,10 +2,30 @@ import React, { Component } from 'react';
 import { Text, View, ScrollView, FlatList, Modal, Button, TextInput, StyleSheet } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { Card, Icon } from '@rneui/themed';
-import { baseUrlimages, tituloColorClaro } from '../comun/comun';
+import { baseUrlimages, tituloColorClaro, baseUrldata } from '../comun/comun';
 import { connect } from 'react-redux';
-import { postComentario, postFavorito, postModalComentario, updateModalView } from '../redux/ActionCreators';
+import { excursionesFailed, postComentario, postFavorito, postModalComentario, updateModalView, addFoto} from '../redux/ActionCreators';
 import * as Haptics from 'expo-haptics';
+import * as ImagePicker from 'expo-image-picker';
+//import {get,getDatabase,ref,child,push} from 'firebase/database'
+//import {getStorage, ref as reference, getDownloadURL, listAll, uploadBytesResumable} from 'firebase/storage'
+
+
+//const [uploading, setUploading] = useState(false)
+
+/*
+const updateImage = (uri,excursionId) =>{
+  fetch(baseUrldata+'fotos.json', {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({'uri':uri,'excursionId':excursionId})
+  })
+}
+*/
+
 
 const modalStyles = StyleSheet.create({
   container: {
@@ -46,7 +66,8 @@ const mapStateToProps = state => {
     excursiones: state.excursiones,
     comentarios: {'comentarios':Object.values(state.comentarios.comentarios),'errMess':state.comentarios.errMess},
     favoritos: state.favoritos,
-    modalComentario: state.modalComentario
+    modalComentario: state.modalComentario,
+    fotos: state.fotos
   }
 }
 
@@ -54,11 +75,37 @@ const mapDispatchToProps = dispatch => ({
   postFavorito: (excursionId) => dispatch(postFavorito(excursionId)),
   updateModalView: () => dispatch(updateModalView()),
   postModalComentario: (event) => dispatch(postModalComentario(event)),
-  postComentario: (comentario) => dispatch(postComentario(comentario))
+  postComentario: (comentario) => dispatch(postComentario(comentario)),
+  addFoto: (foto) => dispatch(addFoto(foto))
 })
+
 
 function RenderExcursion(props) {
 
+  pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    if (!result.canceled) {
+      fetch( baseUrldata +'fotos.json', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'uri': result.assets[0].uri,'id':props.excursionId.excursionId})
+      });
+      props.addFoto(result.assets[0].uri,props.excursionId.excursionId)
+      console.log(props.excursionId)
+      
+    }
+  };
+  
   const excursion = props.excursion;
 
   if (excursion != null) {
@@ -99,6 +146,8 @@ function RenderExcursion(props) {
             color='#000FFF'
             onPress={() => props.updateModalView()}
           />
+          <Button title="Subir una foto" onPress={() => pickImage()}/>
+
         </View>
       </Card>
     );
@@ -137,6 +186,25 @@ function RenderComentario(props) {
       </View>
     </Card>
   );
+}
+
+function RenderFotos(props){
+  const imagenes = props.fotos.fotos
+  
+  return (
+    <Card>
+      <Card.Title>IMAGENES DE LA EXCURSION</Card.Title>
+      <Card.Divider />
+      <View>
+        {imagenes.map((uri) => {
+          return (
+            <Card.Image source={uri}></Card.Image>
+          );
+        })}
+      </View>
+    </Card>
+  );
+
 }
 
 class DetalleExcursion extends Component {
@@ -207,6 +275,8 @@ class DetalleExcursion extends Component {
           favorita={this.props.favoritos.favoritos.some(el => el === excursionId)}
           onPress={() => this.marcarFavorito(excursionId)}
           updateModalView={this.props.updateModalView}
+          addFoto={this.props.addFoto}
+          excursionId={this.props.route.params}
         />
 
         <RenderComentario
@@ -233,6 +303,7 @@ class DetalleExcursion extends Component {
             <Button title="Enviar comentario" onPress={this.gestionarComentario}/>
           </View>
         </Modal>
+        <RenderFotos fotos={this.props.fotos} />
       </ScrollView>
     );
   }

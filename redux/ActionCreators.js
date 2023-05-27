@@ -186,3 +186,35 @@ export const addComentario = (comentario) => ({
     type: ActionTypes.ADD_COMENTARIO,
     payload: comentario
 });
+
+export const fetchFotos = () => (dispatch) => {
+    console.log('hace el fetch')
+    return fetch(baseUrldata + 'fotos.json')
+    .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error('Error ' + response.status + ': ' + response.statusText);
+          error.response = response;
+          throw error;
+        }
+      },
+      error => {
+            var errmess = new Error(error.message);
+            throw errmess;
+      })
+    .then(response => response.json())
+    .then(fotos => dispatch(addFotos(fotos)))
+}
+
+export const addFoto = (foto,id) => ({
+    
+
+    type: ActionTypes.ADD_FOTO,
+    payload: {'uri':foto, 'id':id}
+})
+
+export const addFotos = (fotos) => ({
+    type: ActionTypes.ADD_FOTOS,
+    payload: fotos
+})
