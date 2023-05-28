@@ -7,6 +7,7 @@ import { actividades } from './actividades';
 import { favoritos } from './favoritos';
 import { modalComentario } from './modal';
 import {fotos} from './fotos';
+import { siguienteSalida } from './siguienteSalida';
 
 export const ConfigureStore = () => {
     const store = configureStore({
@@ -17,7 +18,8 @@ export const ConfigureStore = () => {
             cabeceras: cabeceras,
             actividades: actividades,
             favoritos: favoritos,
-            fotos: fotos
+            fotos: fotos,
+            siguienteSalida: siguienteSalida
         },
         middleware: [thunk],
     });

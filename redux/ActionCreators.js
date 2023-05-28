@@ -54,6 +54,26 @@ export const fetchExcursiones = () => (dispatch) => {
     .catch(error => dispatch(excursionesFailed(error.message)));
 };
 
+export const patchSalidaExcursion = (idExcursion,salidaDatetime) => (dispatch) => {
+    const body = {}
+    body[idExcursion+"/siguienteSalida"] = salidaDatetime;
+    return fetch(baseUrldata+'excursiones.json/', {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+        }).then(setTimeout(() => {
+            dispatch(fetchExcursiones())
+        }, 1000));
+};
+
+export const updateSiguienteSalida = (siguienteSalida) => ({
+    type: ActionTypes.UPDATE_SIGUIENTE_SALIDA,
+    payload: siguienteSalida
+})
+
 export const excursionesLoading = () => ({
     type: ActionTypes.EXCURSIONES_LOADING
 });
@@ -145,7 +165,7 @@ export const addActividades = (actividades) => ({
 export const postFavorito = (excursionId) => (dispatch) => {
     setTimeout(() => {
         dispatch(addFavorito(excursionId));
-    }, 2000);
+    }, 500);
 };
 export const addFavorito = (excursionId) => ({
     type: ActionTypes.ADD_FAVORITO,
@@ -188,7 +208,6 @@ export const addComentario = (comentario) => ({
 });
 
 export const fetchFotos = () => (dispatch) => {
-    console.log('hace el fetch')
     return fetch(baseUrldata + 'fotos.json')
     .then(response => {
         if (response.ok) {

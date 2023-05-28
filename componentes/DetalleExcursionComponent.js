@@ -4,9 +4,10 @@ import { Rating } from 'react-native-ratings';
 import { Card, Icon } from '@rneui/themed';
 import { baseUrlimages, tituloColorClaro, baseUrldata } from '../comun/comun';
 import { connect } from 'react-redux';
-import { excursionesFailed, postComentario, postFavorito, postModalComentario, updateModalView, addFoto} from '../redux/ActionCreators';
+import { excursionesFailed, postComentario, postFavorito, postModalComentario, updateModalView, addFoto, patchSalidaExcursion, updateSiguienteSalida } from '../redux/ActionCreators';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 //import {get,getDatabase,ref,child,push} from 'firebase/database'
 //import {getStorage, ref as reference, getDownloadURL, listAll, uploadBytesResumable} from 'firebase/storage'
 
@@ -64,10 +65,11 @@ const modalStyles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     excursiones: state.excursiones,
-    comentarios: {'comentarios':Object.values(state.comentarios.comentarios),'errMess':state.comentarios.errMess},
+    comentarios: { 'comentarios': Object.values(state.comentarios.comentarios), 'errMess': state.comentarios.errMess },
     favoritos: state.favoritos,
     modalComentario: state.modalComentario,
-    fotos: state.fotos
+    fotos: state.fotos,
+    siguienteSalida: state.siguienteSalida
   }
 }
 
@@ -76,7 +78,9 @@ const mapDispatchToProps = dispatch => ({
   updateModalView: () => dispatch(updateModalView()),
   postModalComentario: (event) => dispatch(postModalComentario(event)),
   postComentario: (comentario) => dispatch(postComentario(comentario)),
-  addFoto: (foto) => dispatch(addFoto(foto))
+  addFoto: (foto) => dispatch(addFoto(foto)),
+  patchSalidaExcursion: (excursionId, salidaDatetime) => dispatch(patchSalidaExcursion(excursionId, salidaDatetime)),
+  updateSiguienteSalida: (siguienteSalida) => dispatch(updateSiguienteSalida(siguienteSalida))
 })
 
 
@@ -90,22 +94,22 @@ function RenderExcursion(props) {
       aspect: [4, 3],
       quality: 1,
     });
-  
+
     if (!result.canceled) {
-      fetch( baseUrldata +'fotos.json', {
+      fetch(baseUrldata + 'fotos.json', {
         method: 'POST',
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({'uri': result.assets[0].uri,'id':props.excursionId.excursionId})
+        body: JSON.stringify({ 'uri': result.assets[0].uri, 'id': props.excursionId.excursionId })
       });
-      props.addFoto(result.assets[0].uri,props.excursionId.excursionId)
+      props.addFoto(result.assets[0].uri, props.excursionId.excursionId)
       console.log(props.excursionId)
-      
+
     }
   };
-  
+
   const excursion = props.excursion;
 
   if (excursion != null) {
@@ -146,8 +150,14 @@ function RenderExcursion(props) {
             color='#000FFF'
             onPress={() => props.updateModalView()}
           />
-          <Button title="Subir una foto" onPress={() => pickImage()}/>
-
+          <Icon
+            raised
+            reverse
+            name={'camera'}
+            type='font-awesome'
+            color='#0CD263'
+            onPress={() => pickImage()}
+          />
         </View>
       </Card>
     );
@@ -188,12 +198,12 @@ function RenderComentario(props) {
   );
 }
 
-function RenderFotos(props){
+function RenderFotos(props) {
   const imagenes = props.fotos.fotos
-  
+
   return (
     <Card>
-      <Card.Title>IMAGENES DE LA EXCURSION</Card.Title>
+      <Card.Title>IMÁGENES DE LA EXCURSIÓN</Card.Title>
       <Card.Divider />
       <View>
         {imagenes.map((uri) => {
@@ -264,20 +274,51 @@ class DetalleExcursion extends Component {
       Haptics.NotificationFeedbackType.Warning
     )
     this.props.postFavorito(excursionId);
-  };
+  }
+
 
   render() {
     const { excursionId } = this.props.route.params;
+    const excursion = this.props.excursiones.excursiones[+excursionId];
+    const formatoFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    if (excursion != null && 'siguienteSalida' in excursion) {
+      siguienteSalidaProgramada = new Date(excursion.siguienteSalida);
+    } else {
+      siguienteSalidaProgramada = new Date("2015-03-25");
+    };
+    console.log(this.props.siguienteSalida);
+
     return (
       <ScrollView>
         <RenderExcursion
-          excursion={this.props.excursiones.excursiones[+excursionId]}
+          excursion={excursion}
           favorita={this.props.favoritos.favoritos.some(el => el === excursionId)}
           onPress={() => this.marcarFavorito(excursionId)}
           updateModalView={this.props.updateModalView}
           addFoto={this.props.addFoto}
           excursionId={this.props.route.params}
         />
+        <Card>
+          <Text style={{ fontWeight: 'bold', justifyContent: 'center', fontSize: 16, marginBottom: 10, marginTop: 20 }}>Siguiente salida programada:</Text>
+          <Text style={{ justifyContent: 'center', fontSize: 16, marginBottom: 10 }}>{siguienteSalidaProgramada.toLocaleString("es-ES", formatoFecha)}</Text>
+          <View style={{ flexDirection: 'col', marginVertical: 30, marginLeft: 10 }}>
+            <DateTimePicker
+              value={this.props.siguienteSalida.siguienteSalida}
+              mode={'datetime'}
+              is24Hour={true}
+              onChange={(event, selectedDatetime) => {
+                this.props.updateSiguienteSalida(selectedDatetime)
+              }}
+              style={{ marginRight: 70 }}
+            />
+            <Button title="Cambiar" onPress={() => {
+              this.props.patchSalidaExcursion(excursionId, this.props.siguienteSalida.siguienteSalida);
+              Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Success
+              )
+            }} ></Button>
+          </View>
+        </Card>
 
         <RenderComentario
           comentarios={this.props.comentarios.comentarios.filter((comentario) => comentario.excursionId === excursionId)}
@@ -300,7 +341,7 @@ class DetalleExcursion extends Component {
             </View>
 
             <Button title="Cancelar" onPress={this.resetModal} />
-            <Button title="Enviar comentario" onPress={this.gestionarComentario}/>
+            <Button title="Enviar comentario" onPress={this.gestionarComentario} />
           </View>
         </Modal>
         <RenderFotos fotos={this.props.fotos} />
