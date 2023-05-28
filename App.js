@@ -14,6 +14,7 @@ const store = ConfigureStore();
 
 export default function App() {
   usePreventScreenCapture();
+
   const unsubscribe = NetInfo.addEventListener(state => {
     if (!state.isConnected){
       Alert.alert('Desconectado', 'Conéctese a internet para actualizar los datos de la aplicación', [

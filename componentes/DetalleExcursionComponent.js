@@ -8,26 +8,13 @@ import { excursionesFailed, postComentario, postFavorito, postModalComentario, u
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Audio } from 'expo-av';
 import es from "date-fns/locale/es"
-//import {get,getDatabase,ref,child,push} from 'firebase/database'
-//import {getStorage, ref as reference, getDownloadURL, listAll, uploadBytesResumable} from 'firebase/storage'
 
-
-//const [uploading, setUploading] = useState(false)
-
-/*
-const updateImage = (uri,excursionId) =>{
-  fetch(baseUrldata+'fotos.json', {
-    method: 'POST',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({'uri':uri,'excursionId':excursionId})
-  })
+async function playMarioCoin() {
+  const { sound } = await Audio.Sound.createAsync( require('../assets/marioCoin.mp3'));
+  await sound.playAsync();
 }
-*/
-
 
 const modalStyles = StyleSheet.create({
   container: {
@@ -88,7 +75,6 @@ const mapDispatchToProps = dispatch => ({
 function RenderExcursion(props) {
 
   pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -198,7 +184,7 @@ function RenderComentario(props) {
 }
 
 function RenderFotos(props) {
-  const imagenes = props.fotos.fotos
+  const imagenes = props.fotos.fotos.filter(foto => foto.id === props.excursionId)
 
   return (
     <Card>
@@ -273,6 +259,7 @@ class DetalleExcursion extends Component {
       Haptics.NotificationFeedbackType.Warning
     )
     this.props.postFavorito(excursionId);
+    playMarioCoin();
   }
 
 
@@ -347,7 +334,7 @@ class DetalleExcursion extends Component {
             <Button title="Enviar comentario" onPress={this.gestionarComentario} />
           </View>
         </Modal>
-        <RenderFotos fotos={this.props.fotos} />
+        <RenderFotos fotos={this.props.fotos} excursionId={excursionId} />
       </ScrollView>
     );
   }
