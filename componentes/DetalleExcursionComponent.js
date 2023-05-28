@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { Text, View, ScrollView, FlatList, Modal, Button, TextInput, StyleSheet } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { Card, Icon } from '@rneui/themed';
-import { baseUrlimages, tituloColorClaro, baseUrldata } from '../comun/comun';
+import { baseUrlimages, tituloColorClaro, tituloColorOscuro, baseUrldata } from '../comun/comun';
 import { connect } from 'react-redux';
 import { excursionesFailed, postComentario, postFavorito, postModalComentario, updateModalView, addFoto, patchSalidaExcursion, updateSiguienteSalida } from '../redux/ActionCreators';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import es from "date-fns/locale/es"
 //import {get,getDatabase,ref,child,push} from 'firebase/database'
 //import {getStorage, ref as reference, getDownloadURL, listAll, uploadBytesResumable} from 'firebase/storage'
 
@@ -105,8 +106,6 @@ function RenderExcursion(props) {
         body: JSON.stringify({ 'uri': result.assets[0].uri, 'id': props.excursionId.excursionId })
       });
       props.addFoto(result.assets[0].uri, props.excursionId.excursionId)
-      console.log(props.excursionId)
-
     }
   };
 
@@ -123,14 +122,14 @@ function RenderExcursion(props) {
             top: 25,
             left: 0,
             right: 0,
-            color: tituloColorClaro,
+            color: tituloColorOscuro,
             textAlign: 'center',
             fontSize: 30,
             fontWeight: 'bold',
           }}>
           {excursion.nombre}
         </Text>
-        <Text style={{ margin: 20 }}>
+        <Text style={{ margin: 20, textAlign: 'justify'}}>
           {excursion.descripcion}
         </Text>
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -286,7 +285,8 @@ class DetalleExcursion extends Component {
     } else {
       siguienteSalidaProgramada = new Date("2015-03-25");
     };
-    console.log(this.props.siguienteSalida);
+    textoSalida = siguienteSalidaProgramada.toLocaleString("es-ES", formatoFecha)
+    textoSalida = textoSalida.charAt(0).toUpperCase() + textoSalida.slice(1);
 
     return (
       <ScrollView>
@@ -299,9 +299,11 @@ class DetalleExcursion extends Component {
           excursionId={this.props.route.params}
         />
         <Card>
-          <Text style={{ fontWeight: 'bold', justifyContent: 'center', fontSize: 16, marginBottom: 10, marginTop: 20 }}>Siguiente salida programada:</Text>
-          <Text style={{ justifyContent: 'center', fontSize: 16, marginBottom: 10 }}>{siguienteSalidaProgramada.toLocaleString("es-ES", formatoFecha)}</Text>
-          <View style={{ flexDirection: 'col', marginVertical: 30, marginLeft: 10 }}>
+          <Text style={{ fontWeight: 'bold', justifyContent: 'center', fontSize: 16, marginBottom: 10, marginTop: 20 }}>Siguiente salida programada</Text>
+          <Text style={{ justifyContent: 'center', fontSize: 17, marginBottom: 10 }}>{textoSalida}</Text>
+          <View style={{ flexDirection: 'col', marginVertical: 30 }}>
+          <Card.Divider/>
+          <Text style={{ fontWeight: 'bold', justifyContent: 'center', textAlign: 'center', fontSize: 14, marginBottom: 10 }}>Editar fecha</Text>
             <DateTimePicker
               value={this.props.siguienteSalida.siguienteSalida}
               mode={'datetime'}
@@ -310,6 +312,7 @@ class DetalleExcursion extends Component {
                 this.props.updateSiguienteSalida(selectedDatetime)
               }}
               style={{ marginRight: 70 }}
+              locale='es'
             />
             <Button title="Cambiar" onPress={() => {
               this.props.patchSalidaExcursion(excursionId, this.props.siguienteSalida.siguienteSalida);

@@ -198,7 +198,9 @@ export const postComentario = (comentario) => (dispatch) => {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(comentario)
-        }).then(dispatch(fetchComentarios()));
+        }).then(setTimeout(() => {
+            dispatch(fetchComentarios())
+        }, 1000));
 
 }
 
